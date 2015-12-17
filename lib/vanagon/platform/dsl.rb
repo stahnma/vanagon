@@ -161,12 +161,21 @@ class Vanagon
         @platform.servicetype = type
       end
 
-      # Set the name of host to perform a build on (when not using pooler or CLI flags)
+      # Set the list of possible host to perform a build on (when not using
+      # pooler or CLI flags)
       #
-      # @param type [String] the name of the host (must be resolvable)
-      def build_host(name)
-        @platform.build_host = name
+      # @param type [Array] the names of the hosts (must be resolvable)
+      def build_hosts(*args)
+        raise ArgumentError if args.length < 1
+        if args[0].is_a?(Array)
+          @platform.build_hosts = args[0]
+        else
+          @platform.build_hosts = args
+        end
       end
+
+      # Because single vs plural is annoying to remember
+      alias_method :build_host, :build_hosts
 
       # Set the name of this platform as the vm pooler expects it
       #
