@@ -165,13 +165,10 @@ class Vanagon
       # pooler or CLI flags)
       #
       # @param type [Array] the names of the hosts (must be resolvable)
+      # @rase ArgumentError if builds_hosts has no arguments
       def build_hosts(*args)
-        raise ArgumentError if args.length < 1
-        if args[0].is_a?(Array)
-          @platform.build_hosts = args[0]
-        else
-          @platform.build_hosts = args
-        end
+        raise ArgumentError, "build_hosts requires at least one host to be a build target." if args.empty?
+        @platform.build_hosts = Array(args).flatten
       end
 
       # Because single vs plural is annoying to remember
