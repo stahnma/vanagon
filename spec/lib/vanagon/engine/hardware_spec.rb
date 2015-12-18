@@ -23,6 +23,13 @@ describe 'Vanagon::Engine::Hardware' do
     plat._platform
   }
 
+  let (:platform_two_hosts) {
+    plat = Vanagon::Platform::DSL.new('aix-6.1-ppc')
+    plat.instance_eval("platform 'aix-6.1-ppc' do |plat|
+                      plat.build_host 'abcd', 'efgh'
+                    end")
+  }
+
   describe '#select_target' do
     it 'raises an error without a target' do
       base = Vanagon::Engine::Hardware.new(platform_without_build_hosts, nil)
@@ -33,6 +40,13 @@ describe 'Vanagon::Engine::Hardware' do
       base = Vanagon::Engine::Hardware.new(platform, nil)
       expect(base).to receive(:node_lock).with(['abcd']).and_return('abcd')
       expect(base.select_target).to eq('abcd')
+    end
+
+    it 'try a second host if the first is locked' do
+      base = Vanagon::Engine::Hardware.new(platform_two_hosts, nil)
+      # morgan look at this 
+#      expect(base).to receive(:node_lock).with(['efgh']).and_return('efgh')
+#      expect(base.select_target).to eq('efgh')
     end
   end
 
