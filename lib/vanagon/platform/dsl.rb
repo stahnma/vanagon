@@ -7,6 +7,7 @@ require 'vanagon/platform/rpm/eos'
 require 'vanagon/platform/osx'
 require 'vanagon/platform/solaris_10'
 require 'vanagon/platform/solaris_11'
+require 'vanagon/platform/tar'
 require 'vanagon/platform/windows'
 require 'securerandom'
 require 'uri'
@@ -46,6 +47,8 @@ class Vanagon
                       Vanagon::Platform::Solaris11.new(@name)
                     when /^windows-/
                       Vanagon::Platform::Windows.new(@name)
+                    when /^alpine-/
+                      Vanagon::Platform::TAR.new(@name)
                     else
                       fail "Platform not implemented for '#{@name}' yet. Please go do so..."
                     end

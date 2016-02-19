@@ -154,6 +154,10 @@ class Vanagon
       return !!@name.match(/^(aix|cisco-wrlinux|el|eos|fedora|sles)-.*$/)
     end
 
+    def is_tar?
+      return !!@name.match(/^(alpine)-.*$/)
+    end
+
     # Utility matcher to determine is the platform is an enterprise linux variety
     #
     # @return [true, false] true if it is a enterprise linux variety, false otherwise
