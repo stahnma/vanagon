@@ -1,0 +1,52 @@
+pkgname="<%= @name %>"
+pkgver=<%= @version %>
+pkgrel=<%= @release %>
+pkgdesc="<%= @description.lines.first.chomp %>"
+url=" <%= @homepage %>"
+<% if @noarch -%>
+arch="all"
+<% else -%>
+arch="<%= @arch %>"
+<% end -%>
+license="See Components"
+depends="<%= get_requires.join(", ") %>"
+depends_dev="make"
+makedepends="$depends_dev"
+replaces="<%= get_replaces.map { |replace| "#{replace.replacement} #{replace.version ? "(<< #{replace.version})" : ""}" }.join(", ") %>"
+conflicts="<%= get_replaces.map { |replace| "#{replace.replacement} #{replace.version ? "(<< #{replace.version})" : ""}" }.join(", ") %>"
+depends-"<%= get_requires.join(", ") %>"
+provides="<%= get_provides.map { |prov| prov.provide }.join(", ") %>"
+replaces_priority=1
+install="$pkgname.pre-install $pkgname.post-install $pkgname.pre-upgrade $pkgname.post-upgrade $pkgname.pre-deinstall $pkgname.post-deinstall"
+source="<%= @name %>-<%= @version %>.tar.gz"
+
+_builddir="$srcdir"/<%= @name %>-<%= @version %>
+
+
+prepare() {
+    return 0
+}
+
+build() {
+    return 0
+}
+
+package() {
+    cd "$_builddir"
+    # Copy each directory into place
+<%- get_directories.map {|d| d.path.sub(/^\//,'')}.each do |dir| -%>
+    if [ -d <%= dir %> ]; then \
+        install -d "$_builddir"/<%= File.dirname(dir) %>; \
+        cp -pr <%= dir %> "$_builddir"/<%= File.dirname(dir) %>; \
+    else \
+        install -d "$_builddir"/<%= dir %>; \
+    fi
+<%- end -%>
+    # Copy each of the extra files into place
+<%- (get_files + get_configfiles).map {|f| f.path.sub(/^\//,'')}.each do |file| -%>
+    install -d "$_builddir"/<%= File.dirname(file) %>
+    cp -Rp <%= file %> "$_builddir"/<%= File.dirname(file) %>
+<%- end -%>
+}
+
+md5sums="97a43328e81e57ebed7f135ca0c07e82  <%= @name %>-<%= @version %>.tar.gz"

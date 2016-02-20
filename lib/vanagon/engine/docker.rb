@@ -20,9 +20,9 @@ class Vanagon
       # @raise [Vanagon::Error] if a target cannot be obtained
       def select_target
         suffix = (0...10).map { ('a'..'z').to_a[rand(26)] }.join
-        #Vanagon::Utilities.ex("#{@docker_cmd} run -d --name #{@platform.docker_image}-builder-#{suffix} -p #{@platform.ssh_port}:22 #{@platform.docker_image}")
-        Vanagon::Utilities.ex("#{@docker_cmd} run -d --name #{@platform.docker_image}-builder-#{suffix} #{@platform.docker_image}")
-       @platform.ssh_port = system("#{docker_cmd} docker inspect -f '{{json .NetworkSettings.Ports}}' #{@platform.docker_image} | awk -F: '{print $NF}' | cut -d\" -f2")
+        Vanagon::Utilities.ex("#{@docker_cmd} run -d --name #{@platform.docker_image}-builder-#{suffix} -p #{@platform.ssh_port}:22 #{@platform.docker_image}")
+        #Vanagon::Utilities.ex("#{@docker_cmd} run -d --name #{@platform.docker_image}-builder-#{suffix} #{@platform.docker_image}")
+#       @platform.ssh_port = system("#{docker_cmd} docker inspect -f '{{json .NetworkSettings.Ports}}' #{@platform.docker_image} | awk -F: '{print $NF}' | cut -d\" -f2")
         @target = 'localhost'
 
         # Wait for ssh to come up in the container
