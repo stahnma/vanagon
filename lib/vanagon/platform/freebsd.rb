@@ -10,12 +10,8 @@ class Vanagon
         pkg_arch_opt = project.noarch ? "" : "-a#{@architecture}"
         ["mkdir -p output/#{target_dir}",
         "mkdir -p $(tempdir)/#{project.name}-#{project.version}",
-        "cp #{project.name}-#{project.version}.tar.gz $(tempdir)/#{project.name}_#{project.version}.orig.tar.gz",
-        "cat file-list >> freebsd/install",
         "cp -pr freebsd $(tempdir)/#{project.name}-#{project.version}",
         "gunzip -c #{project.name}-#{project.version}.tar.gz | '#{@tar}' -C '$(tempdir)/#{project.name}-#{project.version}' --strip-components 1 -xf -",
-        "sed -i 's/\ /?/g' $(tempdir)/#{project.name}-#{project.version}/freebsd/install",
-        "(cd $(tempdir)/#{project.name}-#{project.version}; pkguild --no-lintian #{pkg_arch_opt} -uc -us)",
         "cp $(tempdir)/*.pkg ./output/#{target_dir}"]
       end
 
