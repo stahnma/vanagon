@@ -8,6 +8,7 @@ require 'vanagon/platform/osx'
 require 'vanagon/platform/solaris_10'
 require 'vanagon/platform/solaris_11'
 require 'vanagon/platform/windows'
+require 'vanagon/platform/freebsd'
 require 'securerandom'
 require 'uri'
 
@@ -38,6 +39,8 @@ class Vanagon
                       Vanagon::Platform::DEB.new(@name)
                     when /^eos-/
                       Vanagon::Platform::RPM::EOS.new(@name)
+                    when /^freebsd-/
+                      Vanagon::Platform::FREEBSD.new(@name)
                     when /^osx-/
                       Vanagon::Platform::OSX.new(@name)
                     when /^solaris-10/
